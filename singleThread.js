@@ -11,19 +11,19 @@ console.log(a+b);
 // asynchronous nature: random, not one by one
 // solutions: callbacks, setTimeout,
 // browser sets setTimeout function inside callstack of JS
-setTimeout( () => {
-    console.log("apna college"); //2. apna college
-}, 2000);
+// setTimeout( () => {
+//     console.log("apna college"); //2. apna college
+// }, 2000);
 
-setTimeout( () => {
-    console.log("hello world"); //3. hello world
-}, 2000);
+// setTimeout( () => {
+//     console.log("hello world"); //3. hello world
+// }, 2000);
 
-console.log("hello..."); //1. hello...
+// console.log("hello..."); //1. hello...
 
 
 // asynchronous causes problem: callback hell
-let h1 = document.querySelector("h1");
+// let h1 = document.querySelector("h1");
 
 // setTimeout(() => {
 //     h1.style.color = "orange";
@@ -50,18 +50,46 @@ let h1 = document.querySelector("h1");
 
 
 // callback hell
-function changeColor(color, delay, nextColorChange) {
-    setTimeout( () => {
-        h1.style.color = color;
-        if(nextColorChange) nextColorChange();
-    }, delay);
-}
-// callbacks nesting -> callback hell
-changeColor("red", 1000, () => {
-    changeColor("green", 1000, () => {
-        changeColor("blue", 1000, () => {
-            changeColor("brown", 1000)
-        });
+// function changeColor(color, delay, nextColorChange) {
+//     setTimeout( () => {
+//         h1.style.color = color;
+//         if(nextColorChange) nextColorChange();
+//     }, delay);
+// }
+// // callbacks nesting -> callback hell
+// changeColor("red", 1000, () => {
+//     changeColor("green", 1000, () => {
+//         changeColor("blue", 1000, () => {
+//             changeColor("brown", 1000)
+//         });
+//     });
+// });
+
+
+// code refactoring
+// applying promises to callback hell(explore promises first)
+let h1 = document.querySelector("h1");
+
+function changeColor(color, delay) {
+    return new Promise( (resolve, reject) => {
+        setTimeout( () => {
+            h1.style.color = color;
+            resolve("color changed");
+        }, delay);
     });
-});
+}
+// console.log(changeColor("red", 1000));
+// promise chaining
+changeColor("red", 1000)
+.then( () => {
+    console.log("red color was complete");
+    return changeColor("green", 1000);
+})
+.then( () => {
+    console.log("green color was complete");
+    return changeColor("blue", 1000);
+})
+.then( () => {
+    console.log("blue color was complete");
+})
 
